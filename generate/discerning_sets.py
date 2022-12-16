@@ -7,7 +7,7 @@ This module generates example subset for even ns in the given interval.
 For this, it tests all subset of [n] with even number of elements and founds ones with maximum `m`.
 Maximum computed number was n=34 (runs over a day on my laptop).
 
-For each n, it stores generated examples in `results_{n}.pickle` for reproducibility.
+For each n, it stores generated examples in `data/results_{n}.pickle` for reproducibility.
 In pickle file, there is a dictionary, where for each n list of examples in the following format is stored:
 n -> (max_m, examples, c), 
 where `examples` is the list of examples and `c` is a number of processed subsets. 
@@ -88,7 +88,7 @@ def main():
             print(f'{s = }, {m = }, {i = }, {counts = }')
         print()
 
-        with Path(f'data/results_{n}.pickle').open('wb') as f:
+        with Path(f'../data/results_{n}.pickle').open('wb') as f:
             pickle.dump(result, f)
 
 

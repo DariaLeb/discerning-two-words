@@ -11,7 +11,7 @@ For this, it tests all subset of [n] with sum `s` constructed as
 
 It is sufficient to test only sums `n` and `n + 1` for canonical subsets.
 
-For each n, it stores generated examples in `results_unique_{n}.pickle` for reproducibility. 
+For each n, it stores generated examples in `data/results_unique_{n}.pickle` for reproducibility. 
 Format of the pickle file is described in `discerning_sets.py`.
 """
 
@@ -95,7 +95,7 @@ def main():
         print()
 
         if n > 30:
-            with Path(f'data/results_unique_{n}.pickle').open('wb') as f:
+            with Path(f'../data/results_unique_{n}.pickle').open('wb') as f:
                 pickle.dump(result, f)
 
 
