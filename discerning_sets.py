@@ -1,4 +1,21 @@
+import pickle
 from itertools import chain, combinations
+from pathlib import Path
+
+"""
+This module generates example subset for even ns in the given interval. 
+For this, it tests all subset of [n] with even number of elements and founds ones with maximum `m`.
+Maximum computed number was n=34 (runs over a day on my laptop).
+
+For each n, it stores generated examples in `results_{n}.pickle` for reproducibility.
+In pickle file, there is a dictionary, where for each n list of examples in the following format is stored:
+n -> (max_m, examples, c), 
+where `examples` is the list of examples and `c` is a number of processed subsets. 
+Examples are stored in the following format:
+[(s, m, i, counts)], 
+where `s` is a subset, `m` is m for this subset, `i` is the residue where violation for given `m` occurs and 
+`counts` is a list with number of elements in each residue class.
+"""
 
 
 def even_subsets(n):
@@ -58,8 +75,11 @@ def analyze_n(n):
 
 def main():
 
-    for n in range(6, 32, 2):
+    result = {}
+
+    for n in range(6, 40, 2):
         max_m, examples, c = analyze_n(n)
+        result[n] = max_m, examples, c
 
         print('---' * 3)
         print(f'for {n = } {c} subsets were processed')
@@ -67,6 +87,9 @@ def main():
         for s, m, i, counts in examples:
             print(f'{s = }, {m = }, {i = }, {counts = }')
         print()
+
+        with Path(f'data/results_{n}.pickle').open('wb') as f:
+            pickle.dump(result, f)
 
 
 if __name__ == '__main__':
