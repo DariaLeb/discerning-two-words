@@ -12,7 +12,7 @@ It could be maximum m, number of examples, min/max sum etc.
 
 if __name__ == '__main__':
 
-    with Path('data/results_unique_62.pickle').open('rb') as f:
+    with Path('../data/results_unique_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     ns = list(result)
