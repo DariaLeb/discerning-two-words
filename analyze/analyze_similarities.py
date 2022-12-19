@@ -37,14 +37,17 @@ def main():
 
         similarities = {
             (x, y): (pair_occurrences[x, y] + pair_disoccurrences[x, y]) / len(examples_)
-            for x, y in product(elements, elements)
-            if pair_disoccurrences[x, y] or pair_occurrences[x, y]
+            for x, y in product(elements, elements) if x < y
         }
 
-        print(similarities)
-        print(set(similarities.values()))
+        print(f'Different similarity values: {sorted(set(similarities.values()))}')
 
-        print('Similar values:')
+        print('Unsimilar values (similarity = 0):')
+        for (x, y), value in similarities.items():
+            if value == 0:
+                print(x, y)
+
+        print('Similar values (similarity = 1):')
         for (x, y), value in similarities.items():
             if value == 1:
                 print(x, y)
