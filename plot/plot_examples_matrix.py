@@ -15,6 +15,19 @@ Visual guidelines in a form of vertical lines separating each 8 examples are add
 """
 
 
+def create_matrix(n, examples):
+
+    matrix = np.zeros((len(examples), n // 2), dtype=int)
+    for ii, (example, m_, i, counts) in enumerate(examples):
+        for x in example[:len(example) // 2]:
+            matrix[ii, x - 1] = 1
+
+    n_ex = len(examples)
+    matrix = np.vstack((sort_matrix(matrix[:n_ex // 2, :]), sort_matrix(matrix[n_ex // 2:, :])))
+
+    return matrix.T
+
+
 def sort_matrix(matrix):
 
     matrix = [''.join(map(str, x)) for x in matrix]
@@ -36,22 +49,18 @@ def main():
 
         print(n, m)
 
-        matrix = np.zeros((len(examples), n // 2), dtype=int)
-        for ii, (example, m_, i, counts) in enumerate(examples):
-            for x in example[:len(example) // 2]:
-                matrix[ii, x - 1] = 1
-
+        matrix = create_matrix(n, examples)
         n_ex = len(examples)
-        matrix = np.vstack((sort_matrix(matrix[:n_ex // 2, :]), sort_matrix(matrix[n_ex // 2:, :])))
 
-        for matrix in [matrix[:n_ex // 2, :], matrix[n_ex // 2:, :]]:
-            matrix = matrix.T
-            print(matrix)
+        for matrix in [matrix[:, :n_ex // 2], matrix[:, n_ex // 2:]]:
+            # print(matrix)
 
-            labels = range(1, len(matrix) + 1)
+            xlabels = np.sum(matrix, axis=0)  # number of elements in the subset
+            # xlabels = np.diff(matrix, axis=0).astype(bool).sum(axis=0) + 1  # number of intervals
+            ylabels = range(1, len(matrix) + 1)
 
             plt.figure()
-            sns.heatmap(matrix, cbar=False, square=True, xticklabels=np.sum(matrix, axis=0), yticklabels=labels)
+            sns.heatmap(matrix, cbar=False, square=True, xticklabels=xlabels, yticklabels=ylabels)
             plt.title(n)
             plt.xticks(rotation=90, fontsize=6)
             plt.yticks(fontsize=6)
