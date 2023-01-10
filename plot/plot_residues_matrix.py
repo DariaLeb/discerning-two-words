@@ -66,10 +66,9 @@ def main():
         cmap = [(1, 1, 1)] + cmap[:len(residues_n)] + [(1, 1, 1)] + cmap[len(residues_n):]
 
         # custom labels representing groups of residues "i + (sum - i) % m"
-        tick_labels = ['']
+        tick_labels = []
         for j in residues_n:
             tick_labels.append(f'{j}+{(n - j) % i}')
-        tick_labels.append('')
         for j in residues_n1:
             tick_labels.append(f'{j}+{(n + 1 - j) % i}')
 
@@ -83,11 +82,12 @@ def main():
             xticklabels=False, yticklabels=range(1, len(matrix) + 1), cmap=cmap
         )
 
-        # colorbar with custom labels at the center of each color bar
+        # colorbar with custom labels at the center of each color bar (except for the first and separator)
         cbar = ax.collections[0].colorbar
         ticks = [
             (n_colors - 1) / (2 * n_colors) + (n_colors - 1) / n_colors * i
             for i in range(n_colors)
+            if i not in [0, len(residues_n) + 1]
         ]
         cbar.ax.set_xticks(ticks=ticks, labels=tick_labels, fontsize=6)
 
