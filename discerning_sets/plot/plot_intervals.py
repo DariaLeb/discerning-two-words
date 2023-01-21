@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from plot.plot_examples_matrix import create_matrix
+from discerning_sets.plot.plot_examples_matrix import create_matrix
 
 """
 Analyze number of intervals of consecutive 1s and 0s in examples matrix, 

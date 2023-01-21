@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from plot.plot_examples_matrix import create_matrix
+from discerning_sets.plot.plot_examples_matrix import create_matrix
 
 """
 This modules plots colorful example matrix, where to each number present in example we assign its residue group.

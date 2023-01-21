@@ -1,7 +1,7 @@
 import pickle
 from pathlib import Path
 
-from analyze.analyze_similarities import get_similarities
+from discerning_sets.analyze.analyze_similarities import get_similarities
 
 """
 This module analyzes constraints resulted from (un)similarities - we try to answer 
