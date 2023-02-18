@@ -62,3 +62,25 @@ def permutation_automaton(n):
     f = Automaton.f_from_lists(states, transitions0, transitions1)
 
     return Automaton(0, f)
+
+
+def increased_permutation_automaton(n):
+
+    states = list(range(n))
+    transitions0 = list(np.random.permutation(n))
+    transitions1 = [(t + 1) % n for t in transitions0]
+
+    f = Automaton.f_from_lists(states, transitions0, transitions1)
+
+    return Automaton(0, f)
+
+
+def shifted_permutation_automaton(n):
+
+    states = list(range(n))
+    transitions0 = list(np.random.permutation(n))
+    transitions1 = transitions0[1:] + transitions0[:1]
+
+    f = Automaton.f_from_lists(states, transitions0, transitions1)
+
+    return Automaton(0, f)
