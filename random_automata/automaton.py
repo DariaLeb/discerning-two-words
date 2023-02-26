@@ -2,7 +2,8 @@ from typing import Any, Iterable
 import numpy as np
 
 """
-This module describes `Automaton` class and provides two functions to create automaton: permutation and random one.
+This module describes `Automaton` class and provides several functions 
+to create automaton (permutation, random and others).
 """
 
 
@@ -32,9 +33,12 @@ class Automaton:
         self.q0 = q0
         self.f = f
 
-    def process(self, w: Iterable):
+        self.states = list(f)
 
-        q = self.q0
+    def process(self, w: Iterable, q=None):
+
+        if q is None:
+            q = self.q0
 
         for a in w:
             q = self.f[q][int(a)]
