@@ -12,9 +12,9 @@ It loads experiments' data and create a figure for each number of changes there 
 
 
 paths = [
-    Path('data') / f'res_1000_4583.pickle',
-    Path('data') / f'res_shifted_1000_3429.pickle',
-    Path('data') / f'res_cycle_shifted_1000_4420.pickle',
+    Path('../data/res_1000_4583.pickle'),
+    Path('../data/res_shifted_1000_3429.pickle'),
+    Path('../data/res_cycle_shifted_1000_4420.pickle'),
 ]
 
 result = None
@@ -27,8 +27,6 @@ for path in paths:
         for key in ['permutation', 'random', 'shifted_permutation', 'cycle_shifted_permutation']:
             if res.get(key):
                 result[key] = res[key]
-
-print(result)
 
 settings = result['settings']
 m = settings['m']
@@ -85,6 +83,8 @@ for i, n_change in enumerate(n_changes):
 
     plt.title(f'{m = }, changes = {n_change}, {n_words = }, {n_tries = }, {n_ns = }, {log_space = }')
     plt.tight_layout()
-    plt.savefig(f'images/compare_m_{m}_{n_change}_{rand_key}.pdf')
+    plt.savefig(f'../images/compare_m_{m}_{n_change}_{rand_key}.pdf')
+
+    print(rand_key)
 
 plt.show()
