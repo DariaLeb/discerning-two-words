@@ -104,8 +104,8 @@ def main():
         },
         'permutation': [],
         'random': [],
+        'increased_permutation': [],
         'shifted_permutation': [],
-        'cycle_shifted_permutation': [],
     }
 
     for n_change in n_changes:
@@ -126,7 +126,7 @@ def main():
         )
 
     rand_key = np.random.randint(10000)
-    path = Path('data') / f'res_{m}_{rand_key}.pickle'
+    path = Path(f'../data/res_{m}_{rand_key}.pickle')
     with open(path, 'wb') as f:
         pickle.dump(res, f)
 
@@ -153,7 +153,7 @@ def main():
 
         plt.title(f'{key}: {m = }, {n_words = }, {n_tries = }, {n_ns = }, {log_space = }')
         plt.tight_layout()
-        plt.savefig(f'images/experiment_m_{m}_{key}_{rand_key}.pdf')
+        plt.savefig(f'../images/experiment_m_{m}_{key}_{rand_key}.pdf')
 
     plt.show()
 
