@@ -110,7 +110,7 @@ def main():
     print('Start `Random automaton` experiment')
     res['random'] = run_experiment(random_automaton, m, ns, n_words, n_tries)
 
-    path = Path('data') / f'res_{m}_{np.random.randint(10000)}.pickle'
+    path = Path(f'../data/res_{m}_{np.random.randint(10000)}.pickle')
     with open(path, 'wb') as f:
         pickle.dump(res, f)
 
@@ -134,7 +134,7 @@ def main():
 
     plt.title(f'{m = }, {n_words = }, {n_tries = }, {n_ns = }, {log_space = }')
     plt.tight_layout()
-    plt.savefig(f'images/experiment_m_{m}.pdf')
+    plt.savefig(f'../images/experiment_m_{m}.pdf')
     plt.show()
 
 
