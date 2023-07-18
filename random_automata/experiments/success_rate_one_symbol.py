@@ -6,10 +6,10 @@ from time import time
 import numpy as np
 import matplotlib.pyplot as plt
 
-from random_automata.automaton import permutation_automaton, random_automaton
+from random_automata.automaton import permutation_automaton, random_automaton, shifted_permutation_automaton
 
 """
-In this module we compare success rate of permutation and random automata. 
+In this module we compare success rate of different automata types automata (random, permutation, shifted permutation). 
 For a fixed word length `m`, we create `n_words` random pairs of words which differs in one symbol only.
 We try `n_ns` automaton sizes spaced evenly or logarithmically over interval [1, m].
 For each pair and automaton size, we create `n_tries` random and permutation automata and 
@@ -20,7 +20,9 @@ For each `n` (automaton size) we compute
 - min success ratio (minimal ratio of successful tries over all tried word pairs)
 - max success ratio (maximal ratio of successful tries over all tried word pairs)
 
-We store the results in  `data/res_{m}_{random_suffix}.pickle` and plot computed statistics.
+We store the results together with settings of the experiment in `data/res_{m}_{random_suffix}.pickle` 
+for reproducibility. We plot computed statistics and save the resulting graph as 
+`images/experiment_m_{m}_{random_suffix}.pdf` with the same suffix as corresponding data.
 """
 
 
@@ -65,32 +67,25 @@ def plot_results(results, ns, n_words, n_tries, title, style):
 
     n_log = [math.log(n) for n in ns]
 
-    plt.plot(n_log, avg, linestyle=style, marker='.', label=f'{title} (avg ~ total success rate over all words)')
-    plt.plot(n_log, min_, linestyle=style, marker='.', label=f'{title} (min ~ worst distinguishable word)')
-    plt.plot(n_log, max_, linestyle=style, marker='.', label=f'{title} (max ~ best distinguishable word)')
+    plt.plot(n_log, avg, linestyle=style, marker='.', label=f'{title} (avg)')
+    plt.plot(n_log, min_, linestyle=style, marker='.', label=f'{title} (min)')
+    plt.plot(n_log, max_, linestyle=style, marker='.', label=f'{title} (max)')
 
 
 def main():
 
-    m = 500
+    m = 4000
     n_words = 100
-    n_tries = 100
-    n_ns = 10
+    n_tries = 1000
+    n_ns = 100
 
-    log_space = True
-
-    if log_space:
-        ns = np.geomspace(1, m, num=n_ns, dtype=int)
-    else:
-        ns = np.linspace(1, m, num=n_ns, dtype=int)
-
+    ns = np.geomspace(1, m, num=n_ns, dtype=int)
     ns = sorted(set(ns))
 
     tries = {
         'log(n)': int(math.log(m)),
         r'$\sqrt{n}$': int(m ** (1 / 2)),
-        r'$\frac{n}{3}$': m // 3,
-        r'$\frac{n}{2}$': m // 3,
+        r'$\frac{n}{2}$': m // 2,
         'n': m,
     }
 
@@ -100,9 +95,11 @@ def main():
             'n_words': n_words,
             'n_tries': n_tries,
             'n_ns': n_ns,
-            'logspace': log_space,
         }
     }
+
+    print('Start `Shifted permutation automaton` experiment')
+    res['shifted_permutation'] = run_experiment(shifted_permutation_automaton, m, ns, n_words, n_tries)
 
     print('Start `Permutation automaton` experiment')
     res['permutation'] = run_experiment(permutation_automaton, m, ns, n_words, n_tries)
@@ -110,14 +107,16 @@ def main():
     print('Start `Random automaton` experiment')
     res['random'] = run_experiment(random_automaton, m, ns, n_words, n_tries)
 
-    path = Path(f'../data/res_{m}_{np.random.randint(10000)}.pickle')
+    suffix = np.random.randint(10000)
+    path = Path(f'../data/res_{m}_{suffix}.pickle')
     with open(path, 'wb') as f:
         pickle.dump(res, f)
 
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=(10, 6.6))
 
-    plot_results(res['permutation'], ns, n_words, n_tries, 'Permutation automaton', '-')
-    plot_results(res['random'], ns, n_words, n_tries, 'Random automaton', '--')
+    plot_results(res['shifted_permutation'], ns, n_words, n_tries, 'Shifted permutation', 'dotted')
+    plot_results(res['permutation'], ns, n_words, n_tries, 'Permutation', '-')
+    plot_results(res['random'], ns, n_words, n_tries, 'Random', '--')
 
     for name, border in tries.items():
         plt.axvline(math.log(border), color='k', linestyle=':')
@@ -132,9 +131,8 @@ def main():
     plt.ylabel('Ratio of distinguished pairs')
     plt.xlabel('Size of automaton [log]')
 
-    plt.title(f'{m = }, {n_words = }, {n_tries = }, {n_ns = }, {log_space = }')
     plt.tight_layout()
-    plt.savefig(f'../images/experiment_m_{m}.pdf')
+    plt.savefig(f'../images/experiment_m_{m}_{suffix}.pdf')
     plt.show()
 
 
