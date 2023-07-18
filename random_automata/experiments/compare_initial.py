@@ -7,39 +7,23 @@ import matplotlib.pyplot as plt
 
 """
 This script is used to compare different automata experiments with fixed or various initial states.
-It loads experiments' data and create a figure with two subplots for each number of changes there with all tried automata.
+It loads experiments' data and create a figure for each number of changes with all tried automata
+Tries with fixed initial state are distinguished from those with various by color, 
+while automata types are distinguished by line style.
+
+We store the figures in `images/compare_initial_m_{m}_{n_change}_{rand_key}.pdf`, 
+where random suffix is added to avoid collisions.
 """
 
 
-path_fixed = [
-    Path('../data') / f'res_1000_4583.pickle',
-    Path('../data') / f'res_shifted_1000_3429.pickle',
-    Path('../data') / f'res_cycle_shifted_1000_4420.pickle',
-]
+path_fixed = Path('../data') / f'res_multiple_1000_8386.pickle'
+path_choose = Path('../data') / f'res_1000_4650_choose.pickle'
 
-path_choose = [Path('../data') / f'res_1000_4650_choose.pickle']
+with path_fixed.open('rb') as f:
+    result_fixed = pickle.load(f)
 
-result_fixed = None
-
-for path in path_fixed:
-    with path.open('rb') as f:
-        res = pickle.load(f)
-        result_fixed = result_fixed or res
-        assert result_fixed['settings'] == res['settings']
-        for key in ['permutation', 'random', 'shifted_permutation', 'cycle_shifted_permutation']:
-            if res.get(key):
-                result_fixed[key] = res[key]
-
-result_choose = None
-
-for path in path_choose:
-    with path.open('rb') as f:
-        res = pickle.load(f)
-        result_choose = result_choose or res
-        assert result_choose['settings'] == res['settings']
-        for key in ['permutation', 'random', 'increased_permutation', 'shifted_permutation']:
-            if res.get(key):
-                result_choose[key] = res[key]
+with path_choose.open('rb') as f:
+    result_choose = pickle.load(f)
 
 settings = result_choose['settings']
 m = settings['m']
@@ -47,37 +31,31 @@ n_words = settings['n_words']
 n_tries_choose = settings['n_tries']
 n_ns = settings['n_ns']
 n_changes = settings['n_changes']
-log_space = settings['logspace']
 
 n_tries_fixed = result_fixed['settings']['n_tries']
 
-if log_space:
-    ns = np.geomspace(1, m, num=n_ns, dtype=int)
-else:
-    ns = np.linspace(1, m, num=n_ns, dtype=int)
-
+ns = np.geomspace(1, m, num=n_ns, dtype=int)
 ns = sorted(set(ns))
 
 tries = {
     'log(n)': int(math.log(m)),
     r'$\sqrt{n}$': int(m ** (1 / 2)),
-    r'$\frac{n}{3}$': m // 3,
-    r'$\frac{n}{2}$': m // 3,
+    r'$\frac{n}{2}$': m // 2,
     'n': m,
 }
 
 keys_fixed = ['permutation', 'random', 'shifted_permutation']
-titles_fixed = ['fixed: permutation', 'fixed: random', 'fixed: increased', 'fixed: shifted']
-styles_fixed = ['-', '--', 'dashdot', 'dotted']
+titles_fixed = ['fixed: permutation', 'fixed: random', 'fixed: shifted']
+styles_fixed = ['-', '--', 'dotted']
 
-keys_choose = ['permutation', 'random', 'increased_permutation']
-titles_choose = ['various: permutation', 'various: random', 'various: increased', 'various: shifted']
-styles_choose = ['-', '--', 'dashdot', 'dotted']
+keys_choose = ['permutation', 'random', 'shifted_permutation']
+titles_choose = ['various: permutation', 'various: random', 'various: shifted']
+styles_choose = ['-', '--', 'dotted']
 
 rand_key = np.random.randint(10000)
 
 for i, n_change in enumerate(n_changes):
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=(8, 5.3))
 
     for key, title, style in zip(keys_fixed, titles_fixed, styles_fixed):
         if key not in result_fixed:
@@ -108,7 +86,6 @@ for i, n_change in enumerate(n_changes):
     plt.ylabel('Ratio of distinguished pairs')
     plt.xlabel('Size of automaton [log]')
 
-    plt.title(f'changes = {n_change}')
     plt.tight_layout()
     plt.savefig(f'../images/compare_initial_m_{m}_{n_change}_{rand_key}.pdf')
 
