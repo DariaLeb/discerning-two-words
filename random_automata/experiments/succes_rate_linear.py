@@ -19,7 +19,9 @@ We may try different automaton constructions, but for now we stick to "shifted p
 We compute the results in parallel over words' lengths.
 We are trying different word lengths and plot the result.
 
-We also store the results in  `data/linear_{n_changes}_{rand_key}.pickle`.
+We store the resulting data in  `data/linear_{key}_{rand_key}.pickle`,
+and the resulting graph in `images/linear_{key}_{rand_key}.pdf`,
+where key is the name of tried automata type (specified on input).
 """
 
 
@@ -82,29 +84,32 @@ def run_experiment(automaton, word_len, n_words, n_tries, n_changes):
         else:
             success = 0
 
-        if success >= 10:
+        if success >= 5:
             break
 
-        n += 5
+        n += 1
 
-    bool_history = map(lambda x: int(x == n_tries * n_words), history)
-    bool_history = ', '.join(map(str, bool_history))
-    print(f'Finish m={word_len}, n={first_n}\nstart={start}\nsuccess rates: {bool_history}\nhistory: {history}')
+    print(f'Finish m={word_len}, n={first_n}\nhistory: {history}')
 
-    return first_n, history[:-9], ns[:-9]
+    return first_n, history, ns
 
 
 def main():
 
-    n_words = 1000
+    automaton = shifted_permutation_automaton
+    key = 'shifted_permutation'
+
+    n_words = 10000
     n_tries = 100
 
-    ms = range(50, 1050, 50)
+    ms = range(10, 50, 5)
 
-    for n_changes in [0.5, 1]:
+    result = {}
+
+    for n_changes in [0.1, 0.2, 0.5, 0.7, 0.9, 1]:
         task = partial(
             run_experiment,
-            random_automaton,
+            automaton,
             n_words=n_words, n_tries=n_tries, n_changes=n_changes
         )
 
@@ -112,38 +117,26 @@ def main():
             res = pool.map(task, ms)
 
         res, history, ns = zip(*res)
-        rand_key = np.random.randint(10000)
-        path = Path(f'../data/linear_usual_{n_changes}_{rand_key}.pickle')
-        with open(path, 'wb') as f:
-            pickle.dump({'ms': ms, 'res': res, 'history': history, 'ns': ns}, f)
 
-        plt.figure()
-        plt.plot(ms, res)
+        result[n_changes] = {'res': res, 'history': history, 'ns': ns}
 
-        plt.ylabel('n = minimal successful size')
-        plt.xlabel('m = word length')
+    rand_key = np.random.randint(10000)
+    path = Path(f'../data/linear_{key}_{rand_key}.pickle')
+    with open(path, 'wb') as f:
+        pickle.dump({'result': result, 'ms': ms}, f)
 
-        plt.title(f'Random automaton, {int(n_changes * 100)}% of changes in the word')
+    plt.figure(figsize=(10, 6.6))
 
-        plt.tight_layout()
-        plt.savefig(f'../images/linear_random_size_changes_{n_changes}_{rand_key}.pdf')
+    for n_changes, res in result.items():
+        key = int(round(n_changes * 100))
+        plt.plot(ms, res['res'], label=f'{key}% of differences')
 
-        for i in list(range(0, len(ms), 4)) + [len(ms) - 1]:
-            h = history[i]
-            h = [j * 100 / (n_tries * n_words) for j in h]
-            n = ns[i]
-            m = ms[i]
+    plt.legend()
+    plt.ylabel('Minimal successful size')
+    plt.xlabel('Word length')
 
-            plt.figure()
-            plt.plot(n, h)
-
-            plt.ylabel('Percentage before first fail [%]')
-            plt.xlabel('n = automaton size')
-
-            plt.title(f'Random automaton, {int(n_changes * 100)}% of changes in the word, m = {m}')
-
-            plt.tight_layout()
-            plt.savefig(f'../images/linear_random_size_history_{n_changes}_{m}_{rand_key}.pdf')
+    plt.tight_layout()
+    plt.savefig(f'../images/linear_{key}_{rand_key}.pdf')
 
 
 if __name__ == '__main__':
