@@ -3,15 +3,13 @@ from itertools import chain, combinations
 from pathlib import Path
 
 """
-This module generates canonical example subsets satisfying the sum requirement for even ns in the given interval.
+This module generates proper sets for ns in the given interval.
 Maximum computed number was n=62 (runs over a day on my laptop).
 
 For this, it tests all subset of [n] with sum `s` constructed as 
-{1} + randomly generated first half from [2..(s-1)/2] + compliment second half.
+{1} + randomly generated first half from [2..(s-1)/2] + compliment second half making `n + 1` sum.
 
-It is sufficient to test only sums `n` and `n + 1` for canonical subsets.
-
-For each n, it stores generated examples in `data/results_unique_{n}.pickle` for reproducibility. 
+It stores generated examples in `data/results_proper_{n}.pickle` for reproducibility. 
 Format of the pickle file is described in `discerning_sets.py`.
 """
 
@@ -84,7 +82,7 @@ def main():
 
     result = {}
 
-    for n in range(62, 100, 2):
+    for n in range(6, 63):
         max_m, examples, c = analyze_n(n)
         result[n] = max_m, examples, c
 
@@ -94,8 +92,8 @@ def main():
             print(f's = {[x for x in s[:len(s) // 2]]} | {[x for x in s[len(s) // 2:]]}')
         print()
 
-        if n > 30:
-            with Path(f'../data/results_unique_{n}.pickle').open('wb') as f:
+        if n > 40:
+            with Path(f'../data/results_proper_{n}.pickle').open('wb') as f:
                 pickle.dump(result, f)
 
 
