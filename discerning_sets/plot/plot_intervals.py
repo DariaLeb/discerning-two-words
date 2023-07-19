@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from discerning_sets.plot.plot_examples_matrix import create_matrix
+from discerning_sets.plot.plot_proper_matrix import create_matrix
 
 """
 Analyze number of intervals of consecutive 1s and 0s in examples matrix, 
@@ -16,7 +16,7 @@ We can see that both borders grow, but at the first sight they look pretty rando
 
 def main():
 
-    with Path(f'../data/results_unique_62.pickle').open('rb') as f:
+    with Path(f'../data/results_proper_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     mins, maxs, ns = [], [], []

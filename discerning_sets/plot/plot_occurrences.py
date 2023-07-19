@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 """
-This module plots a bar chart with relative occurrences of each element in example subsets.
+This module plots a bar chart with relative occurrences of each element in critical subsets.
 For each number X, we count a number of subsets where is can possibly appear in the first half
 and use it as a denominator for actual occurrences. 
 We then subtract 0.5 from each number and plot the results for all xs except for 1.
@@ -50,7 +50,7 @@ def count_occurrences(result):
 
 def main():
 
-    with Path(f'../data/results_unique_62.pickle').open('rb') as f:
+    with Path(f'../data/results_proper_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     occurrences = count_occurrences(result)

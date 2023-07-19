@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 """
-This module visualize each example for given `n` as a plot with numbers of example's first half on Y axis.
+This module visualize each critical set for given `n` as a plot with numbers of set's first half on Y axis.
 Multiple `n` can be placed on one or different subplots.
 """
 
@@ -21,7 +21,7 @@ def plot_ax(ax, exs, color, label):
 
 
 if __name__ == '__main__':
-    with Path('../data/results_unique_62.pickle').open('rb') as f:
+    with Path('../data/results_proper_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     minimal_n = [n for n, (m, examples, _) in result.items() if len(examples) == 2]
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         plot_ax(ax, exs, color, n)
 
     plt.tight_layout()
-    plt.savefig('images/examples_12_18.pdf')
+    plt.savefig('../images/examples_12_18.pdf')
     plt.show()
     #
     # plt.figure()

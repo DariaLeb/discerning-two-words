@@ -10,8 +10,8 @@ from plot_occurrences import count_occurrences
 
 """
 This module plots a connection graph for pairs of elements for one or multiple given ns.
-We count example where X and Y occurs simultaneously and 
-divide it by number of examples where at least one of them occurs.
+We count critical sets where X and Y occurs simultaneously and 
+divide it by number of sets where at least one of them occurs.
 
 We plot all numbers except for 1 (it occurs everywhere). 
 We can also introduce a threshold to plot only extreme cases as otherwise graph tends to be cluttered.

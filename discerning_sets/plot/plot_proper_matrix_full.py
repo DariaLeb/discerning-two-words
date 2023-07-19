@@ -7,11 +7,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 """
-This module plots example matrix similar to the one in `plot_examples_matrix.py`,
-but it takes into account all canonical examples. Examples are divided into groups, separated by vertical lines.
-First, ale example which do not satisfy the sum requirement are plotted. 
-Every other group consists of examples with the same sum. 
-Last two groups are unique examples for n, second to last - for n - 2 and so on.
+This module plots proper matrix similar to the one in `plot_proper_matrix.py`,
+but it takes into account all canonical sets. Sets are divided into groups, separated by vertical lines.
+First, all asymmetric sets are plotted. 
+Every other group consists of sets with the same sum.
 """
 
 

@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from discerning_sets.plot.plot_examples_matrix import create_matrix
+from discerning_sets.plot.plot_proper_matrix import create_matrix
 
 """
 This modules plots colorful example matrix, where to each number present in example we assign its residue group.
@@ -19,7 +19,7 @@ def main():
 
     n = 58
 
-    with Path(f'../data/results_unique_62.pickle').open('rb') as f:
+    with Path(f'../data/results_proper_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     m, examples, _ = result[n]
