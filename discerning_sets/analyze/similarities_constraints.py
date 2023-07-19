@@ -58,7 +58,7 @@ def get_constraints(similar, unsimilar):
 
 def main():
 
-    with Path(f'../data/results_unique_62.pickle').open('rb') as f:
+    with Path(f'../data/results_proper_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     for n, (_, examples, _) in result.items():

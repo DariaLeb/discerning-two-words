@@ -32,7 +32,7 @@ def get_similarities(n, examples):
         for x, y in product(elements, elements) if x < y
     }
 
-    assert set(similarities.values()).issubset({0, 0.5, 1})
+    print(f'Different similarities values: {sorted(set(similarities.values()))}')
 
     unsimilar = [(x, y) for (x, y), value in similarities.items() if value == 0]
     similar = [(x, y) for (x, y), value in similarities.items() if value == 1]
@@ -42,7 +42,7 @@ def get_similarities(n, examples):
 
 def main():
 
-    with Path(f'../data/results_unique_62.pickle').open('rb') as f:
+    with Path(f'../data/results_proper_62.pickle').open('rb') as f:
         result = pickle.load(f)
 
     for n, (_, examples, _) in result.items():

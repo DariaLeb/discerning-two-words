@@ -1,8 +1,6 @@
 import pickle
 from pathlib import Path
 
-from analyze_differences import sort_examples
-
 """
 This module is used to perform different analyses of the generated subsets according to current needs.
 For now, it analyses canonical examples in all generated ones - how much of them satisfy the sum requirement.
@@ -27,9 +25,6 @@ def main():
     # result = {58: result[58]}
 
     for n, (m, examples, _) in result.items():
-
-        # k = len(examples)
-        # examples = sort_examples(examples[:k // 2]) + sort_examples(examples[k // 2:])
 
         print(n, m)
 
